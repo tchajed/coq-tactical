@@ -64,6 +64,18 @@ Ltac destruct_goal_matches :=
   try congruence;
   auto.
 
+Ltac destruct_tuple :=
+  match goal with
+  | [ H: context[let '(a, b) := ?p in _] |- _ ] =>
+    let a := fresh a in
+    let b := fresh b in
+    destruct p as [a b]
+  | [ |- context[let '(a, b) := ?p in _] ] =>
+    let a := fresh a in
+    let b := fresh b in
+    destruct p as [a b]
+  end.
+
 Tactic Notation "destruct" "matches" "in" "*" := destruct_all_matches.
 Tactic Notation "destruct" "matches" "in" "*|-" := destruct_nongoal_matches.
 Tactic Notation "destruct" "matches" := destruct_goal_matches.
