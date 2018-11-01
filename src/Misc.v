@@ -36,3 +36,10 @@ Tactic Notation "gen" constr(X1) constr(X2) constr(X3) constr(X4) :=
   gen X4; gen X3; gen X2; gen X1.
 Tactic Notation "gen" constr(X1) constr(X2) constr(X3) constr(X4) constr(X5) :=
   gen X5; gen X4; gen X3; gen X2; gen X1.
+
+Tactic Notation "pose" "unfolded" constr(pf) tactic(t) :=
+  let H := fresh in
+  pose proof pf as H; t H;
+  repeat match goal with
+         | [ H: _ /\ _ |- _ ] => destruct H
+         end.
