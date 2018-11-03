@@ -7,8 +7,12 @@ before_install:
   - sh <(curl -sL https://raw.githubusercontent.com/ocaml/ocaml-ci-scripts/master/.travis-ocaml.sh)
   - eval $(opam config env)
 env:
-  - OCAML_VERSION=4.06 OPAM_VERSION=2.0.0 COQ_VERSION=master
-  - OCAML_VERSION=4.06 OPAM_VERSION=2.0.0 COQ_VERSION=v8.8
+  global:
+    - OCAML_VERSION=4.06
+    - OPAM_VERSION=2.0.0
+  matrix:
+    - COQ_VERSION=master
+    - COQ_VERSION=v8.8
 
 install:
   - opam pin add -y coq https://github.com/coq/coq.git#$COQ_VERSION
