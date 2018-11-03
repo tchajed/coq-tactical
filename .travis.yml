@@ -1,14 +1,13 @@
 dist: trusty
 sudo: required
-before_install:
-  - sudo apt-get install -y opam
-  - opam init --no-setup --comp=ocaml-base-compiler.4.05.0
-  - eval $(opam config env)
-  - opam install -y num ocamlfind camlp5
+language: c
 install:
-  - git clone --branch master --depth 1 https://github.com/coq/coq
-  - pushd coq && ./configure -coqide no && make && sudo make install && popd
+  - wget https://raw.githubusercontent.com/ocaml/ocaml-ci-scripts/master/.travis-opam.sh
+  - bash -ex .travis-opam.sh
+  - opam install -y num ocamlfind camlp5
+  - git clone --branch master --depth 1 https://github.com/coq/coq /tmp/coq
+  - eval $(opam config env)
+  - pushd /tmp/coq && ./configure -prefix /usr/local/bin -coqide no && make && sudo make install && popd
 script: make test
-addons:
-  apt:
-    update: true
+env:
+  - OCAML_VERSION=4.06
