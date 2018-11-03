@@ -1,0 +1,14 @@
+dist: trusty
+sudo: required
+before_install:
+  - sudo apt-get install -y opam
+  - opam init --no-setup --comp=ocaml-base-compiler.4.05.0
+  - eval $(opam config env)
+  - opam install -y num ocamlfind camlp5
+install:
+  - git clone --branch master --depth 1 https://github.com/coq/coq
+  - pushd coq && ./configure -coqide no && make && sudo make install && popd
+script: make test
+addons:
+  apt:
+    update: true
