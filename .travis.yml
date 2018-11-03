@@ -6,9 +6,9 @@ before_install:
   - bash -ex .travis-ocaml.sh
   - opam install -y num ocamlfind camlp5
 install:
-  - git clone --branch master --depth 1 https://github.com/coq/coq /tmp/coq
+  - git clone --branch master --depth 1 https://github.com/coq/coq $HOME/coq
   - eval $(opam config env)
-  - pushd /tmp/coq && ./configure -prefix /usr/local/bin -coqide no && make && sudo make install && popd
+  - pushd $HOME/coq && ./configure -prefix /usr/local -coqide no && make -j2 && sudo make install && popd
 script: make test
 env:
   - OCAML_VERSION=4.06
