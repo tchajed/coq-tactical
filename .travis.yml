@@ -23,4 +23,4 @@ cache:
   directories:
     - $HOME/.opam
 before_cache:
-  - rm -rf $HOME/.opam/logs
+  - rm -rf $HOME/.opam/log
