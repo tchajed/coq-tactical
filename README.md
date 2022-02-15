@@ -1,6 +1,6 @@
 # Tactical: a library of Coq proof automation
 
-[![Build Status](https://travis-ci.com/tchajed/coq-tactical.svg?branch=master)](https://travis-ci.com/tchajed/coq-tactical)
+[![CI](https://github.com/tchajed/coq-tactical/actions/workflows/coq-action.yml/badge.svg)](https://github.com/tchajed/coq-tactical/actions/workflows/coq-action.yml)
 
 This library provides some basic tactics to augment the Coq standard library.
 
