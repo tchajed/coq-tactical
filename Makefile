@@ -4,12 +4,12 @@ TEST_VFILES := $(shell find 'src' -name "*Tests.v")
 PROJ_VFILES := $(shell find 'src' -name "*.v")
 VFILES := $(filter-out $(TEST_VFILES),$(PROJ_VFILES))
 
-COQARGS := -w +all
+COQARGS := -w +deprecated-since-8.8,+deprecated-since-8.17,+deprecated-since-8.20,+deprecated-since-9.0,-deprecated-transitive-library-file-since-9.0
 
 default: $(VFILES:.v=.vo)
 test: $(TEST_VFILES:.v=.vo) $(VFILES:.v=.vo)
 
-_CoqProject: libname $(wildcard vendor/*)
+_RocqProject: libname $(wildcard vendor/*)
 	@echo "-R src $$(cat libname)" > $@
 	@for libdir in $(wildcard vendor/*); do \
 	libname=$$(cat $$libdir/libname); \
@@ -19,26 +19,26 @@ _CoqProject: libname $(wildcard vendor/*)
 	fi; \
 	echo "-R $$libdir/src $$(cat $$libdir/libname)" >> $@; \
 	done
-	@echo "_CoqProject:"
+	@echo "_RocqProject:"
 	@cat $@
 
-.coqdeps.d: $(ALL_VFILES) _CoqProject
+.coqdeps.d: $(ALL_VFILES) _RocqProject
 	@echo "COQDEP $@"
-	@coqdep -f _CoqProject $(ALL_VFILES) > $@
+	@rocq dep -f _RocqProject $(ALL_VFILES) > $@
 
 ifneq ($(MAKECMDGOALS), clean)
 -include .coqdeps.d
 endif
 
-%.vo: %.v _CoqProject
+%.vo: %.v _RocqProject
 	@echo "COQC $<"
-	@coqc $(COQARGS) $(shell cat '_CoqProject') $< -o $@
+	@rocq compile $(COQARGS) $(shell cat '_RocqProject') $< -o $@
 
 clean:
 	@echo "CLEAN vo glob aux"
 	@rm -f $(ALL_VFILES:.v=.vo) $(ALL_VFILES:.v=.glob)
 	@find $(SRC_DIRS) -name ".*.aux" -exec rm {} \;
-	rm -f _CoqProject .coqdeps.d
+	rm -f _RocqProject .coqdeps.d
 
 .PHONY: default test clean
 .DELETE_ON_ERROR:
