@@ -1,5 +1,5 @@
 From Tactical Require Import UnfoldLemma.
-Require Import Arith.
+From Stdlib Require Import Arith.
 
 Definition complicated_definition a b := a + b.
 
